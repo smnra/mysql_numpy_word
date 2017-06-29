@@ -1,5 +1,6 @@
 #coding=utf-8
 from  datetime  import datetime
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,7 +25,14 @@ engine = create_engine('mysql+pymysql://root:10300@192.168.3.74:50014/4g_kpi_bro
 #df.to_sql('tick_data',engine,if_exists='append')#存入数据库，这句有时候运行一次报错，运行第二次就不报错了，不知道为什么  
 df1 = pd.read_sql(sql,engine)    #read_sql直接返回一个DataFrame对象      设置多个index，只要将index_col的值设置为列表
 
-writer = pd.ExcelWriter('.\\4G\\' + datetime.today().strftime("%Y%m%d") + '_34.xlsx')       #保存表格为excel
+
+filePath = os.getcwd() + '\\4G\\' + datetime.today().strftime("%Y%m%d") +  '\\'         #拼接文件夹以当天日期命名
+if os.path.exists(filePath):                                                   #判断路径是否存在
+    print(u"目标已存在:",filePath)                                                 #如果存在 打印路径已存在,
+else:
+    os.makedirs(filePath)                                                           #如果不存在 创建目录
+
+writer = pd.ExcelWriter(filePath + tdate[0] + '_' + tdate[1] + '_LTE.xlsx')       #保存表格为excel      文件名称为本月起始日期_结束日期_LTE.xlsx
 df1.to_excel(writer,'Sheet1')                                                                  #保存表格为excel
 writer.save()                                                                                   #保存表格为excel
 
@@ -64,8 +72,7 @@ class CreateChart:
         self.rrcFig.autofmt_xdate()                                      #设置x轴时间外观
         plt.ylim(self.yRange)                                            #Y轴 显示范围
         self.rrcAx.legend(self.rrcCity.columns,loc="best", ncol=1, shadow=True)  #设置显示图例 以及图例的位置,级是否有阴影效果
-        self.rrcFig.savefig('.\\4G\\' + rowName+".png")                             #保存为PNG图片
-
+        self.rrcFig.savefig(filePath + tdate[0] + '_' + tdate[1] + '_LTE_' + rowName + '.png')    #保存为 本月起始日期_结束日期_LTE_KPI名称.PNG图片
 
 
 
