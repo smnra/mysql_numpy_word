@@ -7,15 +7,15 @@ import matplotlib.pyplot as plt
 from matplotlib import ticker
 from sqlalchemy import create_engine
 from matplotlib.dates import AutoDateLocator, DateFormatter
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 
 
 def getMonthFirstDay():
     dt = datetime.today()                                                     #获取当前日期
     firstDate = dt.strftime("%Y%m") + '01'                                  #当前月第一天日期
+    todayDate = dt.strftime("%Y%m%d")
     lastDate = datetime(dt.year,dt.month +1,1).strftime("%Y%m") + '01'      #下个月第一天日期
-    return [firstDate,lastDate]
+    return [firstDate,todayDate,lastDate]
 
 tdate = getMonthFirstDay()
 
@@ -82,8 +82,9 @@ class CreateChart:
 yRanges = ((98,100),(99,100),(0,1),(0,0.5),(0,1),(00,100),(80,100),(-120,-90),(1000,5000000),(0,100000000))
 
 
-for i,kpiName in enumerate(df1.columns[2:]):
-    kpi = df1[['日期','地市',kpiName]]                            #取 '日期','地市','rrc建立成功率' 三列数据
+for i,kpiName in enumerate(df1.columns[2:]):                                #此种for语句 表示 遍历 列表df1.columns[2:],i为序号(1,2,3,4,5....)  kpiName 为列表df1.columns[2:]中的每一个元素
+    df1[kpiName] = df1[kpiName].astype(np.float64)                          #类型转换,将列转换为 float64 类型
+    kpi = df1[['日期','地市',kpiName]].fillna(0)                           #取 '日期','地市','rrc建立成功率' 三列数据
     kpiCity = kpi.pivot_table(kpiName, ['日期'], '地市').sort_index(ascending=True)           # 数据列为 'rrc建立成功率', '日期' 列不变,把 '地市'这一列 按照内容转换为多列
     kpiChart = CreateChart()
     kpiChart.createCharts(kpiCity,kpiName,kpiName,yRanges[i])
