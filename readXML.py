@@ -1,65 +1,19 @@
-#encoding=utf-8
-from xml.etree import ElementTree
+# coding=utf-8
 
-rualt = {}
-def print_node(node):
-    nodeDn = {'dn':'', 'lcr':'' }
+import sys
+import xml.etree.cElementTree as ET
+if __name__=="__main__":
+   for event, elem in ET.iterparse("movies.xml", events=('end',)):#注意这里只使用end进行触发即可
+         print(elem.tag, elem.text)
+         if elem.tag=='{raml20.xsd}managedObject':
+            print(elem.attrib)
+         elif elem.tag == '{raml20.xsd}p':
+            a_result = {}
+            a_result=elem.attrib
+            a_result['value']=elem.text
+            if(elem.text==None):
+               print("result none")
+            else:
+               print(a_result)
 
-
-    '''''打印结点基本信息'''
-    #print("==============================================")
-    #print("node.attrib:%s" % node.attrib)
-    if 'class' in  node.attrib.keys() :
-        if node.attrib['class'] == 'MTRACE' :
-            nodeDn['dn'] =  node.attrib['distName']
-            subNodes = node.findall("p")
-            for subNode in  subNodes:
-                if subNode.attrib['name'] == 'lcrId':
-                    nodeDn['lcr'] = subNode.text
-                    break
-    return nodeDn
-
-def read_xml(text):
-
-    toFile = open('dn_lcr.csv', 'a')
-    toFile.seek(0,0)
-    toFile.write("dn,lcr\n")
-
-    '''''读xml文件'''
-    # 加载XML文件（2种方法,一是加载指定字符串，二是加载指定文件）
-    # root = ElementTree.parse(r"D:/test.xml")
-    root = ElementTree.fromstring(text)
-
-
-    # 获取element的方法
-    # 1 通过getiterator
-    lst_node = root.getiterator("managedObject")
-    for node in lst_node:
-        rualt = print_node(node)
-        toFile.write(rualt['dn'] + ',' + rualt['lcr'] + '\n' )
-
-        print(rualt['dn'] + ',' + rualt['lcr'])
-    toFile.close()
-
-
-
-
-
-    print(rualt)
-    """
-    # 2通过 getchildren
-    lst_node_child = lst_node[0].getchildren()[0]
-    print_node(lst_node_child)
-
-    # 3 .find方法
-    node_find = root.find('managedObject')
-    print_node(node_find)
-
-    #4. findall方法
-    node_findall = root.findall("managedObject")[1]
-    print_node(node_findall)
-
-    """
-
-if __name__ == '__main__':
-     read_xml(open("movies.xml").read())
+         elem.clear()
