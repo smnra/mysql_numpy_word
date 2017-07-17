@@ -58,11 +58,11 @@ class readXMLET():
             tmp[-1] = tmp[-1][:-1]                                # 是tofileline 列表的最后一项去掉最后一个字符 ','
             toFile.writelines(tmp)        #写入tmp列表 到文件toFile中
 
-        toFile.seek(0,0)                                        #将文件指针移动到文件第一行第一个字符,即将写入文件标题
-        if not (toFile.tell()):
-            tmp = list(map(lambda x: x + ',', self.title))      #使用map函数 给self.title列表的每一项都增加字符 ','
-            tmp[-1] = tmp[-1][:-1]                                # 是tofileline 列表的最后一项去掉最后一个字符 ','
-            toFile.writelines(tmp)        #写入tmp列表 到文件toFile中,(将标题写入文件第一行)
+        #toFile.seek(0,0)                                        #将文件指针移动到文件第一行第一个字符,即将写入文件标题
+        #if not (toFile.tell()):
+        tmp = list(map(lambda x: x + ',', self.title))      #使用map函数 给self.title列表的每一项都增加字符 ','
+        tmp[-1] = tmp[-1][:-1]                                # 是tofileline 列表的最后一项去掉最后一个字符 ','
+        toFile.writelines(tmp)        #写入tmp列表 到文件toFile中,(将标题写入文件最后一行)
 
         toFile.close()                          #关闭文件
 if __name__=="__main__":
