@@ -66,7 +66,7 @@ class readXMLET():
         toFile.writelines(tmp)        #写入tmp列表 到文件toFile中,(将标题写入文件最后一行)
 
         print("Over!")
-        toFile.close()                          #关闭文件
+        toFile.close()                           #关闭文件
 if __name__=="__main__":
     readxml = readXMLET()
     readxml.readXML("all_lte_trace.xml")
