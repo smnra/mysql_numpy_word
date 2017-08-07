@@ -20,12 +20,12 @@ def getMonthFirstDay():
 
 tdate = getMonthFirstDay()
 #用sqlalchemy创建引擎
-sql = "select * from wcdma_day where 地市 <>'其他'  AND   日期>= '20170601' AND 日期 <  '20170701'"
+sql = "select * from wcdma_day where 地市 <>'其他'  AND   日期>= '20170731' AND 日期 <  '20170901'"
 engine = create_engine('mysql+pymysql://root:10300@192.168.3.74:50014/3g_kpi_browsing?charset=utf8')
 #df.to_sql('tick_data',engine,if_exists='append')#存入数据库，这句有时候运行一次报错，运行第二次就不报错了，不知道为什么  
 df1 = pd.read_sql(sql,engine)    #read_sql直接返回一个DataFrame对象      设置多个index，只要将index_col的值设置为列表
 
-filePath = os.getcwd() + '\\3G\\' + datetime.today().strftime("%Y%m%d") +  '\\'         #拼接文件夹以当天日期命名
+filePath = os.getcwd() +  '\\' + datetime.today().strftime("%Y%m%d")  + '\\3G\\'        #拼接文件夹以当天日期命名
 if os.path.exists(filePath):                                                   #判断路径是否存在
     print(u"目标已存在:",filePath)                                                 #如果存在 打印路径已存在,
 else:
