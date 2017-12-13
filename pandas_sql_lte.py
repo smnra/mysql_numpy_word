@@ -110,16 +110,3 @@ for i,kpiName in enumerate(df1.columns[2:]):                                #此
     kpiChart.createCharts(kpiCity,kpiName,kpiName,yRanges[i])
     #plt.show()
 
-
-
-
-plt.show()
-
-
-
-
-
-
-
-
-
